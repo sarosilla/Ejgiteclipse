@@ -1,4 +1,4 @@
-package examenED;
+package ejercicioGitEclipse;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,14 +15,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-public class SimpleEditor extends JFrame implements ActionListener {
+public class ContribEditor extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JButton boton;
 	private JTextArea textArea;
 	public static String CONTRIBUTING = "CONTRIBUTING.md";
 
-	public SimpleEditor(String title) {
+	public ContribEditor(String title) {
 	    super(title);
 	    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 	    setPreferredSize(new Dimension(300, 350));
@@ -67,9 +67,9 @@ public class SimpleEditor extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-	    SimpleEditor frame;
+	    ContribEditor frame;
 	
-	    frame = new SimpleEditor(CONTRIBUTING);      
+	    frame = new ContribEditor(CONTRIBUTING);      
 	    frame.setVisible(true);                             
 	}
 	
