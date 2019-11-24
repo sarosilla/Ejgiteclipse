@@ -2,10 +2,15 @@ package examenED;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Component;
+import java.awt.Dimension;
+
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -13,46 +18,60 @@ import javax.swing.JTextArea;
 public class SimpleEditor extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	JButton button = new JButton("Guardar cambios");
-	JTextArea newItemArea = new JTextArea();
+	private JButton boton;
+	private JTextArea textArea;
+	public static String CONTRIBUTING = "CONTRIBUTING.md";
 
 	public SimpleEditor(String title) {
-	    super(title);                             
+	    super(title);
+	    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+	    setPreferredSize(new Dimension(300, 350));
+	    
+	    textArea = new JTextArea();
+	    textArea.setLineWrap(true);
+	    textArea.setWrapStyleWord(true);
+	    textArea.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    
+	    try (FileReader reader = new FileReader(CONTRIBUTING)) {
+	    	textArea.read(reader, null);
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
+	    
+	    boton = new JButton("Guardar cambios");
+	    boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    boton.addActionListener(this);
+	    
+	    getContentPane().add(textArea);
+	    getContentPane().add(boton); 	    
+	    
+	    pack();
+	    setVisible(true);
 	    setDefaultCloseOperation(EXIT_ON_CLOSE);  
-	    setSize(300, 350);                        
-	    setLayout(null);
 	    
-	    newItemArea.setLocation(3, 3);
-	    newItemArea.setSize(297, 282);
-	    getContentPane().add(newItemArea);
+	}
 	
-	    button.setLocation(40,290);  
-	    button.setSize(200, 25);
-	    getContentPane().add(button);
-	    
-	    button.addActionListener(this);
-	
+	public void actionPerformed(ActionEvent ae) {
+		
+	    if(ae.getSource() == boton)
+	    {        
+	        try ( 
+	        	PrintWriter out = new PrintWriter(new FileWriter(CONTRIBUTING))) 
+	        {
+	            textArea.write(out);
+	        } catch (IOException e) {
+	            System.err.println("Ocurrió un error");
+	            e.printStackTrace();
+	        }
+	    }
 	}
 	
 	public static void main(String[] args) {
 	    SimpleEditor frame;
 	
-	    frame = new SimpleEditor("CONTRIBUTING.md");      
+	    frame = new SimpleEditor(CONTRIBUTING);      
 	    frame.setVisible(true);                             
 	}
 	
-	public void actionPerformed(ActionEvent e) {
-	
-	    if(e.getSource() == button)
-	    {        
-	        try ( 
-	        	PrintWriter out = new PrintWriter(new FileWriter("CONTRIBUTING.md"))) 
-	        {
-	            newItemArea.write(out);
-	        } catch (IOException e1) {
-	            System.err.println("Ocurrió un error");
-	            e1.printStackTrace();
-	        }
-	    }
-	}
+
 }
